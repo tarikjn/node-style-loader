@@ -1,0 +1,9 @@
+{
+  "name": "style-collector-loader",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./loader.js",
+  "dependencies": {
+    "loader-utils": "^0.2.12"
+  }
+}
