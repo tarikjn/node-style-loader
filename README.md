@@ -92,16 +92,17 @@ function renderPage(contextEl, props) {
 
 ## Server-side style rendering loaders comparison
 
-|  | style collection | CSS Modules | style import splitting | shadows style-loader rendering |
-|--|------------------|-------------|------------------------|--------------------------------|
-|server-style-loader| yes | yes | yes, standard | partial |
-|[react-webpack-server-side-example](https://github.com/webpack/react-webpack-server-side-example)| incomplete | no | partial, standard | no |
-|[style-collector-loader](https://github.com/thereactivestack/style-collector-loader)| requires globals | no | colisions | no |
-|[fake-style-loader](https://github.com/dferber90/fake-style-loader)| partially out of scope | yes | N/A | no |
-|[isomorphic-style-loader](https://github.com/kriasoft/isomorphic-style-loader)| yes | yes | partial, non-standard | no |
+|     | style collection | CSS Modules | style import splitting | shadows style-loader rendering |
+| --- | ---------------- | ----------- | ---------------------- | ------------------------------ |
+| server-style-loader | yes | yes | yes, standard | partial |
+| [react-webpack-server-side-example](https://github.com/webpack/react-webpack-server-side-example) | incomplete | no | partial, standard | no |
+| [style-collector-loader](https://github.com/thereactivestack/style-collector-loader) | requires globals | no | colisions | no |
+| [fake-style-loader](https://github.com/dferber90/fake-style-loader) | partially out of scope | yes | N/A | no |
+| [isomorphic-style-loader](https://github.com/kriasoft/isomorphic-style-loader) | yes | yes | partial, non-standard | no |
 
 ## Roadmap
 
+- add test coverage
 - test deduping
 - add support for media/sourceMap
 - add support for stylesheet url
