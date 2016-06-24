@@ -31,3 +31,10 @@ does not bundle a critical path setup or modify your client code
 critical path loading:
 this loaders will follow the exact bahavior or client loader
 import style or child components in your render functions or use router loading
+
+Roadmap:
+- test deduping
+- add support for media/sourceMap
+- add support for stylesheet url
+- test/add hot reload support
+- optimize speed/inject stylesInDom into style-loader to avoid removal

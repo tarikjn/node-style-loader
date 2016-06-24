@@ -1,0 +1,35 @@
+var styleStack = require('./lib/styleStack');
+var listToStyles = styleStack.listToStyles;
+var initialStyleStack = new styleStack();
+
+// initial style collection
+exports.add = add.bind(null, initialStyleStack);
+
+exports.collectInitial = function collectInitial() {
+  var styleTag = initialStyleStack.getStyleTag();
+  exports.add = inactiveAdd;
+  // commented-out so it doesn't have to be stored by the user and to test hot-reload
+  //initialStyleStack = undefined;
+  return styleTag;
+}
+
+exports.collectContext = function collectContext(fn) {
+
+  var contextStyleStack = new styleStack();
+
+  exports.add = add.bind(null, contextStyleStack);
+  var result = fn();
+  exports.add = inactiveAdd;
+
+  return [
+    contextStyleStack.getStyleTag(),
+    result
+  ]
+}
+
+function add(stack, list, options) {
+  var styles = listToStyles(list);
+  stack.addStylesToStack(styles, options);
+}
+
+function inactiveAdd() {}
