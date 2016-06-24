@@ -92,8 +92,8 @@ function renderPage(contextEl, props) {
 
 ## Server-side style rendering loaders comparison
 
-|    | style collection | CSS Modules | style import splitting | shadows style-loader rendering |
-| -- | ---------------- | ----------- | ---------------------- | ------------------------------ |
+|     | style collection | CSS Modules | style import splitting | shadows style-loader rendering |
+| --- | ---------------- | ----------- | ---------------------- | ------------------------------ |
 | server-style-loader | yes | yes | yes, standard | partial |
 | [react-webpack-server-side-example](https://github.com/webpack/react-webpack-server-side-example) | incomplete | no | partial, standard | no |
 | [style-collector-loader](https://github.com/thereactivestack/style-collector-loader) | requires globals | no | colisions | no |
