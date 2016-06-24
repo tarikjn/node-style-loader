@@ -1,40 +1,109 @@
 # server-style-loader
 
-source: 
+`server-style-loader` is a Webpack loader for loading styles on the server side. It bahave almost identically to `style-loader`, which allows you to use it without changing the way you load CSS in your application components.
 
-- https://github.com/webpack/react-webpack-server-side-example
-  for style-collector code
+`server-style-loader` supports critical path style rendering without imposing any import splitting method. This allows you to have a style loading path independant from your rendering path and has performance implications.
 
-- https://github.com/thereactivestack/style-collector-loader
-  for client-side cleanup
+## How to install
 
-- style-loader
-  for correct loader code compatible with CSS Modules
+```
+$ npm install server-style-loader --save-dev
+```
 
-TODO: test possible race conditions
-TODO: add comparison table: add fake-style-loader, isomorphic-style-loader
+## How to use
 
-table:
-handles style loading
-handles style collecting
-handles regular CSS code
-loading implementation shadows style-loader
-support CSS Modules (local styles)
-does not use globals
-handles style-colleting
-does not require adapting your components
-keep using style-loader on the client-side
-hot module replacement support
-favor entry point vs. browser detect
-does not bundle a critical path setup or modify your client code
+### Webpack configuration 
 
-critical path loading:
-this loaders will follow the exact bahavior or client loader
-import style or child components in your render functions or use router loading
+```js
+target: 'node',
+module: {
+  loaders: [
+    {
+      test: /\.css$/,
+      loader: `server-style!css`
+    },
+    ...
+```
 
-Roadmap:
+### Server rendering
+
+#### Simple usage
+
+```js
+import App from 'components/App'
+import {collectInitial} from 'server-style-loader/collect'
+
+// do not call this before your application component has been imported
+const initialStyleTag = collectInitial()
+
+function renderPage(props) {
+
+  const reactString = renderToString(createElement(App, props))
+
+  return(
+   `<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        ${initialStyleTag}
+      </head>
+      <body>
+        <div id="mount">${reactString}</div>
+        <script src="/build/bundle.js"></script>
+      </body>
+    </html>`
+  )
+}
+```
+
+#### Usage for import splitting
+
+If you conditionally import components during rendering (e.g. in your routes), or import styles in your component render functions, you need to use `collectContext` to collect the critical path CSS.
+
+```js
+import {collectInitial, collectContext} from 'server-style-loader/collect'
+
+// do not call this before your routes have been imported
+const initialStyleTag = collectInitial()
+
+function renderPage(contextEl, props) {
+
+  // render and capture CSS
+  const [contextStyleTag, reactString] = collectContext(
+    () => renderToString(createElement(contextEl, props)))
+
+  return(
+   `<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        ${initialStyleTag}
+        ${contextStyleTag}
+      </head>
+      <body>
+        <div id="mount">${reactString}</div>
+        <script src="/build/bundle.js"></script>
+      </body>
+    </html>`
+  )
+}
+
+```
+
+## Server-side style rendering loaders comparison
+
+|  | style collection | CSS Modules | style import splitting | shadows style-loader rendering |
+|--|------------------|-------------|------------------------|--------------------------------|
+|server-style-loader| yes | yes | yes, standard | partial |
+|[react-webpack-server-side-example](https://github.com/webpack/react-webpack-server-side-example)| incomplete | no | partial, standard | no |
+|[style-collector-loader](https://github.com/thereactivestack/style-collector-loader)| requires globals | no | colisions | no |
+|[fake-style-loader](https://github.com/dferber90/fake-style-loader)| partially out of scope | yes | N/A | no |
+|[isomorphic-style-loader](https://github.com/kriasoft/isomorphic-style-loader)| yes | yes | partial, non-standard | no |
+
+## Roadmap
+
 - test deduping
 - add support for media/sourceMap
 - add support for stylesheet url
 - test/add hot reload support
-- optimize speed/inject stylesInDom into style-loader to avoid removal
+- optimize speed/inject stylesInDom into `style-loader` to save first style load on client
