@@ -1,6 +1,8 @@
 var styleStack = require('./lib/styleStack');
 var listToStyles = styleStack.listToStyles;
-var initialStyleStack = new styleStack();
+// it's necessary setting initialStyleStack as it may not be required as the same module between webpack and the user
+// due to path differences in certain scenarios
+global.initialStyleStack = (global.initialStyleStack !== undefined) ? global.initialStyleStack : new styleStack();
 
 // initial style collection
 exports.add = add.bind(null, initialStyleStack);
@@ -17,6 +19,7 @@ exports.collectContext = function collectContext(fn) {
 
   var contextStyleStack = new styleStack();
 
+  // include path differences may make this fail, TODO: test
   exports.add = add.bind(null, contextStyleStack);
   var result = fn();
   exports.add = inactiveAdd;
