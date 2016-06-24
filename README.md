@@ -1,6 +1,6 @@
 # server-style-loader
 
-`server-style-loader` is a Webpack loader for loading styles on the server side. It bahave almost identically to `style-loader`, which allows you to use it without changing the way you load CSS in your application components.
+`server-style-loader` is a Webpack loader for loading styles on the server side. It behave almost identically to `style-loader`, which allows you to use it without changing the way you load CSS in your application components.
 
 `server-style-loader` supports critical path style rendering without imposing any import splitting method. This allows you to have a style loading path independant from your rendering path and has performance implications.
 
