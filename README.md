@@ -1,6 +1,6 @@
 # server-style-loader
 
-`server-style-loader` is a Webpack loader for loading styles on the server side. It behave almost identically to `style-loader`, which allows you to use it without changing the way you load CSS in your application components.
+A Webpack loader for loading styles on the server side. It behaves almost identically to `style-loader`, which allows you to use it without changing the way you load CSS in your application components.
 
 `server-style-loader` supports critical path style rendering without imposing any import splitting method. This allows you to have a style loading path independant from your rendering path and has performance implications.
 
@@ -90,6 +90,18 @@ function renderPage(contextEl, props) {
 
 ```
 
+### Client-side cleanup
+
+```js
+import serverStyleCleanup from 'server-style-loader/clientCleanup'
+
+// initial react render
+render(AppElement)
+
+// remove server-generated CSS after your first render
+serverStyleCleanup()
+```
+
 ## Server-side style rendering loaders comparison
 
 |     | style collection | CSS Modules | style import splitting | shadows style-loader rendering |
@@ -103,6 +115,7 @@ function renderPage(contextEl, props) {
 ## Roadmap
 
 - add test coverage
+- test contextCollect
 - test deduping
 - add support for media/sourceMap
 - add support for stylesheet url
