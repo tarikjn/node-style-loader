@@ -18,7 +18,7 @@ var mapElContainsItem = function (item, mapEl) {
     }
   }
   return false;
-}
+};
 
 describe("listToStyles", function () {
   it("should return an array with the elements of the input list mapped into part objects", function () {
@@ -42,7 +42,7 @@ describe("listToStyles", function () {
     expect(itemIsPart(list[3], mappedList[3].parts[0])).to.be.eql(true);
     expect(mappedList[3].parts.length).to.be.eql(1);
 
-    expect(mappedList.length).to.be.eql(4)
+    expect(mappedList.length).to.be.eql(4);
   });
 
   it("items with the same id should be in the same mapped elements", function () {
@@ -68,8 +68,8 @@ describe("listToStyles", function () {
     expect(mapElContainsItem(list[2], mappedList[1])).to.be.eql(true);
     expect(mapElContainsItem(list[3], mappedList[1])).to.be.eql(true);
 
-    expect(mappedList.length).to.be.eql(2)
-    expect(mappedList[0].parts.length).to.be.eql(2)
-    expect(mappedList[1].parts.length).to.be.eql(2)
-  })
-})
+    expect(mappedList.length).to.be.eql(2);
+    expect(mappedList[0].parts.length).to.be.eql(2);
+    expect(mappedList[1].parts.length).to.be.eql(2);
+  });
+});
