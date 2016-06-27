@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/iheartradio/server-style-loader.git"
   },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
   "homepage": "https://github.com/iheartradio/server-style-loader",
   "main": "./loader.js",
   "dependencies": {

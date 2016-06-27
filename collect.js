@@ -31,7 +31,9 @@ exports.collectContext = function collectContext(fn) {
 }
 
 function add(stack, list, options) {
-  var styles = listToStyles(list);
+  // var styles = listToStyles(list);
+  //stubbing doesn't work when we use the line above.
+  var styles = styleStack.listToStyles(list);
   stack.addStylesToStack(styles, options);
 }
 
