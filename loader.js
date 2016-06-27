@@ -20,9 +20,8 @@ module.exports.pitch = function(remainingRequest) {
     "// collect the styles",
     "require(" + loaderUtils.stringifyRequest(this, path.join(__dirname, "collect.js")) + ").add(content, " + JSON.stringify(query) + ");",
     "if (content.locals) module.exports = content.locals;",
+
+    // Remove from the cache to keep collecting
     "delete require.cache[module.id];"
   ].join("\n");
 };
-
-// NOTES:
-// - should delete require.cache[module.id]?
