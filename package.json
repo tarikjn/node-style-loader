@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "style-loader for node",
   "author": "Tarik Ansari <tarikansari@iheartmedia.com>",
-  "contributors" : [],
+  "contributors": [],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -13,5 +13,12 @@
   "main": "./loader.js",
   "dependencies": {
     "loader-utils": "^0.2.12"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "rewire": "^2.5.1",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0"
   }
 }
