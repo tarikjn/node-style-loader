@@ -1,5 +1,9 @@
-var collect = require("../collect.js");
+var rewire = require('rewire'); //rewire doesn't play well with our setup.js.  I'll investigate eventually, for now, it's required separeately in each test package
 var styleStack = require("../lib/styleStack");
+
+var rewireCollect = function () { //use with .call(this) in a before or beforeEach callback
+  this.collect = rewire("../collect");
+}
 
 var makeDummyItem = function (id) {
   return [id, "css"+id.toString(), "media"+id.toString(), "sourceMap"+id.toString()];
@@ -14,14 +18,13 @@ var resetGlobalStyleStackContents = function () {
   }
 }
 
-var originalAdd = collect.add
-
 var isProbablyStyleTag = function (str) {
   return (str.startsWith("<style") && str.endsWith("</style>"))
 }
 
 describe("add", function () {
   beforeEach(function () {
+    rewireCollect.call(this) //this allows us to reset the packages global scope, including add's binding
     this.addStylesToStack = sinon.spy(global.initialStyleStack, "addStylesToStack");
 
     this.listToStyles = sinon.spy(styleStack, "listToStyles");
@@ -38,12 +41,12 @@ describe("add", function () {
   });
 
   it("should call listToStyles with the list argument", function () {
-    collect.add(this.list, this.opts);
+    this.collect.add(this.list, this.opts);
     expect(this.listToStyles).to.have.been.calledWith(this.list);
   });
 
   it("should call addStylesToStack with the return of listToStyles and the options argument", function () {
-    collect.add(this.list, this.opts);
+    this.collect.add(this.list, this.opts);
     expect(global.initialStyleStack.addStylesToStack).to.have.been.calledWith(styleStack.listToStyles(this.list), this.opts);
   });
 
@@ -53,6 +56,8 @@ describe("add", function () {
 describe("collectInitial", function () {
 
   beforeEach(function () {
+    rewireCollect.call(this);
+    this.originalAdd = this.collect.add;
     this.getStyleTag = sinon.spy(global.initialStyleStack, "getStyleTag");
   });
 
@@ -61,20 +66,20 @@ describe("collectInitial", function () {
   });
 
   it("should call getStyleTag", function () {
-    collect.collectInitial();
+    this.collect.collectInitial();
     expect(global.initialStyleStack.getStyleTag).to.have.been.calledWith();
   });
 
   it("should set add to a noop function", function () {
-    collect.collectInitial();
-    expect(collect.add).to.not.be.equal(originalAdd);
+    this.collect.collectInitial();
+    expect(this.collect.add).to.not.be.equal(this.originalAdd);
 
-    expect(collect.add([makeDummyItem("0")])).to.be.eql(undefined); //add shouldn't return anything anyway.
+    expect(this.collect.add([makeDummyItem("0")])).to.be.eql(undefined); //add shouldn't return anything anyway.
     expect(global.initialStyleStack.stylesInStack.refs).to.be.eql(undefined); //no styles should be added to stack after the above call
   });
 
   it("should return a style tag in a string", function () {
-    var style = collect.collectInitial();
+    var style = this.collect.collectInitial();
     expect(isProbablyStyleTag(style)).to.be.ok;
   });
 });
@@ -82,16 +87,18 @@ describe("collectInitial", function () {
 describe("collectContext", function () {
 
   beforeEach(function () {
+    rewireCollect.call(this);
+
     this.list = [makeDummyItem("0")];
     this.opts = {};
 
     this.argFuncReturn = "the return of the passed in function";
-    this.firstAdd = sinon.spy(collect, "add");
+    this.firstAdd = sinon.spy(this.collect, "add");
 
     this.argFunc = function () {
-      this.intermediateAdd = collect.add
-      this.intermediateAddSpy = sinon.spy(collect, "add");
-      collect.add(this.list, this.opts);
+      this.intermediateAdd = this.collect.add
+      this.intermediateAddSpy = sinon.spy(this.collect, "add");
+      this.collect.add(this.list, this.opts);
       return this.argFuncReturn;
     }.bind(this);
 
@@ -103,8 +110,8 @@ describe("collectContext", function () {
     this.intermediateAddSpy.restore();
   });
 
-  it("should call the passed in function and return an array whose first element is a style tag and whose second is the funtion's result", function () {
-    var result = collect.collectContext(this.argFunc);
+  it("should call the passed in function and return an array whose first element is a style tag and whose second is the function's result", function () {
+    var result = this.collect.collectContext(this.argFunc);
 
     expect(this.argFunc).to.have.been.called;
 
@@ -114,7 +121,7 @@ describe("collectContext", function () {
   });
 
   it("should rebind add before calling the passed in function and then set it to a noop before returning", function () {
-    collect.collectContext(this.argFunc);
+    this.collect.collectContext(this.argFunc);
 
     expect(this.firstAdd).to.not.have.been.called;
     expect(this.firstAdd).to.not.be.eql(this.intermediateAdd);
@@ -122,7 +129,7 @@ describe("collectContext", function () {
     expect(this.intermediateAddSpy).to.have.been.calledWith(this.list, this.opts);
     expect(global.initialStyleStack.stylesInStack.refs).to.be.eql(undefined);
 
-    expect(collect.add).to.not.be.eql(this.intermediateAdd);
+    expect(this.collect.add).to.not.be.eql(this.intermediateAdd);
 
   });
 })
