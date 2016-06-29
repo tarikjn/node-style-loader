@@ -267,6 +267,28 @@ describe("addStyle", function () {
     expect(this.styleStackInstance.stackStyleElement.cssText).to.be.eql("string3\nstring4\nstring5");
   });
 
+  it("when the returned function is called with undefined, it should not be included in cssText", function () {
+    var update0 = this.styleStackInstance.addStyle({css: "string0"});
+    var update1 = this.styleStackInstance.addStyle({css: "string1"});
+    var update2 = this.styleStackInstance.addStyle({css: "string2"});
+
+    expect(this.styleStackInstance.stackStyleElement.cssText).to.be.eql("string0\nstring1\nstring2");
+
+    update0(undefined);
+
+    expect(this.styleStackInstance.stackStyleElement.cssText).to.be.eql("string1\nstring2");
+
+    update2(undefined);
+
+    expect(this.styleStackInstance.stackStyleElement.cssText).to.be.eql("string1");
+
+    update1(undefined);
+
+    expect(this.styleStackInstance.stackStyleElement.cssText).to.be.eql("");
+
+    update0
+  })
+
   it("if the css property of the input to the returned function is an empty string or undefined, it should not be included in cssText", function () {
     var update0 = this.styleStackInstance.addStyle({css: "string0"});
     var update1 = this.styleStackInstance.addStyle({css: "string1"});
@@ -333,6 +355,8 @@ describe("addStyle", function () {
     expect(alternateStyleStack.stackStyleElement.cssText).to.be.eql("string3\nstring4\nstring7");
 
   });
+
+  it("if the input to ")
 });
 
 describe("getStyleTag", function () {

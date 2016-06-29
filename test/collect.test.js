@@ -1,4 +1,4 @@
-var rewire = require('rewire'); //rewire doesn't play well with our setup.js.  I'll investigate eventually, for now, it's required separeately in each test package
+var rewire = require('rewire'); //rewire doesn't play well with our setup.js.  I'll investigate eventually, for now, it's required separately in each test package
 var styleStack = require("../lib/styleStack");
 
 var rewireCollect = function () { //use with .call(this) in a before or beforeEach callback
@@ -50,7 +50,7 @@ describe("add", function () {
     expect(global.initialStyleStack.addStylesToStack).to.have.been.calledWith(styleStack.listToStyles(this.list), this.opts);
   });
 
-  it.skip("should put the right stuff in the global styleStack (I'll flesh out what this means later)", function () {});
+  it.skip("should ", function () {});
 });
 
 describe("collectInitial", function () {
@@ -74,7 +74,6 @@ describe("collectInitial", function () {
     this.collect.collectInitial();
     expect(this.collect.add).to.not.be.equal(this.originalAdd);
 
-    expect(this.collect.add([makeDummyItem("0")])).to.be.eql(undefined); //add shouldn't return anything anyway.
     expect(global.initialStyleStack.stylesInStack.refs).to.be.eql(undefined); //no styles should be added to stack after the above call
   });
 
