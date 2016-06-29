@@ -55,7 +55,7 @@ describe("add", function () {
     ];
     this.collect.add(list, this.opts);
 
-    expect(global.initialStyleStack.stackStyleElement.cssText).to.be.eql("css30\ncss31\ncss11\ncss10\ncss20\ncss21");
+    expect(global.initialStyleStack.stackStyleElement.cssText).to.be.eql("css30\ncss31\ncss10\ncss11\ncss20\ncss21");
   });
   it("after calling, if the bound styleStack's cssText field started non-empty, all input styles should be inserted into the cssText field", function () {
     var initialList = [
