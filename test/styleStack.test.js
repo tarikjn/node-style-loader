@@ -356,7 +356,6 @@ describe("addStyle", function () {
 
   });
 
-  it("if the input to ")
 });
 
 describe("getStyleTag", function () {

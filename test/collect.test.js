@@ -2,43 +2,37 @@ var rewire = require('rewire'); //rewire doesn't play well with our setup.js.  I
 var styleStack = require("../lib/styleStack");
 
 var rewireCollect = function () { //use with .call(this) in a before or beforeEach callback
-  this.collect = rewire("../collect");
-}
-
-var makeDummyItem = function (id) {
-  return [id, "css"+id.toString(), "media"+id.toString(), "sourceMap"+id.toString()];
+  global.initialStyleStack = new styleStack;
+  this.collect = rewire("../collect.js");
 };
 
-//the API only exposes a bound add function, so we can't use it on a new style stack
-//this only works because none of the methods have any closured variables.
-var resetGlobalStyleStackContents = function () {
-  var dummy = new styleStack;
-  for(i in global.initialStyleStack) {
-    global.initialStyleStack[i] = dummy[i];
+var makeDummyItem = function (id, counter) {
+  if (counter !== undefined) {
+    return [id, ("css"+id)+counter, ("media"+id)+counter, ("sourceMap"+id)+counter];
+  } else {
+    return [id, "css"+id, "media"+id, "sourceMap"+id];
   }
-}
+};
 
 var isProbablyStyleTag = function (str) {
-  return (str.startsWith("<style") && str.endsWith("</style>"))
-}
+  return (str.startsWith("<style") && str.endsWith("</style>"));
+};
 
 describe("add", function () {
   beforeEach(function () {
-    rewireCollect.call(this) //this allows us to reset the packages global scope, including add's binding
+    rewireCollect.call(this); //this allows us to reset the package's global scope, including add's binding
     this.addStylesToStack = sinon.spy(global.initialStyleStack, "addStylesToStack");
 
     this.listToStyles = sinon.spy(styleStack, "listToStyles");
     this.list = [
-      makeDummyItem("1"),
+      makeDummyItem("1")
     ];
     this.opts = {};
-  })
-
-  afterEach(function () {
-    this.listToStyles.restore();
-    this.addStylesToStack.restore();
-    resetGlobalStyleStackContents();
   });
+  afterEach(function () {
+    this.addStylesToStack.restore();
+    this.listToStyles.restore();
+  })
 
   it("should call listToStyles with the list argument", function () {
     this.collect.add(this.list, this.opts);
@@ -50,7 +44,46 @@ describe("add", function () {
     expect(global.initialStyleStack.addStylesToStack).to.have.been.calledWith(styleStack.listToStyles(this.list), this.opts);
   });
 
-  it.skip("should ", function () {});
+  it("after calling, if the bound styleStack's cssText field started empty, all input styles should be inserted into the cssText field grouped by id", function () {
+    var list = [
+      makeDummyItem(3, 0),
+      makeDummyItem(1, 0),
+      makeDummyItem(3, 1),
+      makeDummyItem(2, 0),
+      makeDummyItem(2, 1),
+      makeDummyItem(1, 1)
+    ];
+    this.collect.add(list, this.opts);
+
+    expect(global.initialStyleStack.stackStyleElement.cssText).to.be.eql("css30\ncss31\ncss11\ncss10\ncss20\ncss21");
+  });
+  it("after calling, if the bound styleStack's cssText field started non-empty, all input styles should be inserted into the cssText field", function () {
+    var initialList = [
+      makeDummyItem(1, 0),
+      makeDummyItem(2, 0),
+      makeDummyItem(3, 0),
+    ];
+    this.collect.add(initialList, this.opts);
+    expect(global.initialStyleStack.stackStyleElement.cssText).to.be.eql("css10\ncss20\ncss30");
+
+    var newList = [
+      makeDummyItem(3, 1),
+      makeDummyItem(1, 1),
+      makeDummyItem(2, 1),
+
+      makeDummyItem(2, 2),
+      makeDummyItem(3, 2),
+      makeDummyItem(1, 2),
+      makeDummyItem(1, 3),
+      makeDummyItem(2, 3),
+      makeDummyItem(3, 3)
+    ];
+    this.collect.add(newList, this.opts);
+    expect(global.initialStyleStack.stackStyleElement.cssText).to.be.eql("css11\ncss21\ncss31" + "\ncss32\ncss33" + "\ncss12\ncss13" + "\ncss22\ncss23")
+    //notice the order.  for the ids in the initialList, they're directly replaced by the earliest element with the same id from newList
+    //after those spots are taken up the grouping is per id, with the ids ordered acording to their first appearance in newList.
+
+  });
 });
 
 describe("collectInitial", function () {
