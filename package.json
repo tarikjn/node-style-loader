@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "style-loader for the server side",
   "author": "Tarik Ansari <tarikansari@iheartmedia.com>",
-  "contributors": [],
+  "contributors": [
+    "Zach Stayman <zachstayman@iheartmedia.com>",
+    "Andrew Vickory <andrewvickory@iheartmedia.com>"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

@@ -1,9 +1,9 @@
 # Contributing
 
-We're glad you're considering contributing to server-style-loader!  Below are some tips and a brief guide.
+We're glad you're considering contributing to node-style-loader!  Below are some tips and a brief guide.
 
 1.  Fork and clone the repo:
-  git clone git@github.com:your-username/KeyStack.git
+  git clone git@github.com:your-username/node-style-loader.git
 
 2.  Follow the steps in the ReadMe to set up your machine.
 
