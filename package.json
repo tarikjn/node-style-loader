@@ -1,18 +1,18 @@
 {
-  "name": "server-style-loader",
+  "name": "node-style-loader",
   "version": "0.0.1",
-  "description": "style-loader for node",
+  "description": "style-loader for the server side",
   "author": "Tarik Ansari <tarikansari@iheartmedia.com>",
   "contributors": [],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iheartradio/server-style-loader.git"
+    "url": "https://github.com/iheartradio/node-style-loader.git"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },
-  "homepage": "https://github.com/iheartradio/server-style-loader",
+  "homepage": "https://github.com/iheartradio/node-style-loader#readme",
   "main": "./loader.js",
   "dependencies": {
     "loader-utils": "^0.2.12"
