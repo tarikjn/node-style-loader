@@ -121,3 +121,7 @@ serverStyleCleanup()
 - add support for stylesheet url
 - test/add hot reload support
 - optimize speed/inject stylesInDom into `style-loader` to save first style load on client
+
+## License
+
+Original `style-loader` code is Copyright 2016 Tobias Koppers covered under MIT license. Subsequent work is Copyright 2016 iHeartRadio covered under Apache 2.0 license.
