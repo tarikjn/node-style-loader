@@ -3,15 +3,28 @@
   "version": "0.0.1",
   "description": "style-loader for the server side",
   "author": "Tarik Ansari <tarikansari@iheartmedia.com>",
-  "contributors" : [],
+  "contributors": [
+    "Zach Stayman <zachstayman@iheartmedia.com>",
+    "Andrew Vickory <andrewvickory@iheartmedia.com>"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/iheartradio/node-style-loader.git"
   },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
   "homepage": "https://github.com/iheartradio/node-style-loader#readme",
   "main": "./loader.js",
   "dependencies": {
     "loader-utils": "^0.2.12"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "rewire": "^2.5.1",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0"
   }
 }
