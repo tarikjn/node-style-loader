@@ -1,6 +1,6 @@
 {
   "name": "node-style-loader",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha",
   "description": "style-loader for the server side",
   "author": "Tarik Ansari <tarikansari@iheartmedia.com>",
   "contributors": [
