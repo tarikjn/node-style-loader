@@ -17,6 +17,7 @@ module.exports.pitch = function(remainingRequest) {
     "// load the styles",
     "var content = require(" + loaderUtils.stringifyRequest(this, "!!" + remainingRequest) + ");",
     "if (typeof content === 'string') content = [[module.id, content, '']];",
+    "else if (typeof content === 'object' && content.default) content = [[module.id, content.default[0][1], '']];",
     "// collect the styles",
     "require(" + loaderUtils.stringifyRequest(this, path.join(__dirname, "collect.js")) + ").add(content, " + JSON.stringify(query) + ");",
     "if (content.locals) module.exports = content.locals;",
