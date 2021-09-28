@@ -18,7 +18,7 @@
   "homepage": "https://github.com/iheartradio/node-style-loader#readme",
   "main": "./loader.js",
   "dependencies": {
-    "loader-utils": "^0.2.12"
+    "loader-utils": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
